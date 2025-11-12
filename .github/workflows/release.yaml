@@ -20,10 +20,13 @@ jobs:
     steps:
       - name: Checkout codebase
         uses: actions/checkout@v5
+
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
           go-version: "1.24"
+          # 修改：添加了缓存依赖路径
+          cache-dependency-path: gomobile/go.sum 
           check-latest: true
 
       # Set up JDK
@@ -34,12 +37,9 @@ jobs:
           distribution: "zulu"
           cache: "gradle"
 
+      # 修改：移除了 with 代码块
       - name: Set up Android SDK + NDK
         uses: android-actions/setup-android@v3
-        with:
-          api-level: 34
-          ndk: r26b
-          build-tools: 34.0.0
 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
